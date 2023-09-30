@@ -12,43 +12,42 @@ import { useState } from "react"
 import { Navigate } from "react-router-dom"
 import UseRef from "./components/Hooks/UseRef"
 import UseReducer from "./components/Hooks/UseReducer"
-
+import UserContext from "./components/context/UserContext"
+import DashboardContext from "./components/context/DashboardContext"
+import Home from "./components/Home"
 
 function App() {
-  let [datas, setDatas] = useState([
-    {
-      name: "Vijay",
-      username: "vijay123",
-      email: "vijay@gmail.com",
-      mobile: "1234567",
-      batch: "B101"
-    }, {
-      name: "Joseph",
-      username: "joseph123",
-      email: "joseph@gmail.com",
-      mobile: "123456778",
-      batch: "B102"
-    }
-  ])
 
   return (
     <>
       <div id="wrapper">
         <BrowserRouter>
-          <Sidebar />
+
           <Routes>
-            <Route path="/dashboard" element={<Dashboard datas={datas} setDatas={setDatas} />} />
-            <Route path="/create" element={<Create datas={datas} setDatas={setDatas} />} />
-            <Route path="/edit/:id" element={<Edit datas={datas} setDatas={setDatas} />} />
-            <Route path="nested-example" element={<NestExample />}>
+            <Route path="/dashboard" element={
+              <UserContext>
+                <DashboardContext>
+                  <Sidebar /> <Dashboard />
+                </DashboardContext>
+              </UserContext>} />
+            <Route path="/create" element={
+              <UserContext>
+                <Sidebar /> <Create />
+              </UserContext>} />
+            <Route path="/edit/:id" element={
+              <UserContext>
+                <Sidebar />  <Edit />
+              </UserContext>} />
+            <Route path="nested-example" element={<><Sidebar /><NestExample /></>}>
               <Route path="accounts" element={<Accounts />} />
               <Route path="products" element={<Products />} />
               <Route path="receipts" element={<Receipts />} />
               <Route path="staff" element={<Staff />} />
             </Route>
-            <Route path="usereducer" element={<UseReducer/>}/>
-            <Route path="useref" element={<UseRef />} />
-            <Route path="/*" element={<Navigate to="/dashboard" />} />
+            <Route path="usereducer" element={<><Sidebar /><UseReducer /></>} />
+            <Route path="useref" element={<><Sidebar /><UseRef /></>} />
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
       </div>

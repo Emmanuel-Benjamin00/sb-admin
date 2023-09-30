@@ -1,12 +1,14 @@
-import React from 'react'
+import React , {useContext} from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import { UserDataContext } from './context/UserContext';
 
-function Create({ datas, setDatas }) {
+function Create() {
   let navigate = useNavigate()
+  let {datas,setDatas} = useContext(UserDataContext)
 
   const UserSchema = Yup.object().shape({
     name: Yup.string().required("* Required"),

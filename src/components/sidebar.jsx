@@ -54,7 +54,7 @@ function Sidebar() {
             <li className="nav-item">
 
                 <Link className="nav-link collapsed" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities" to="nested-example">
+                    aria-expanded="true" aria-controls="collapseUtilities" to="/nested-example">
                     <i className="fas fa-fw fa-wrench"></i>
                     <span style={{ color: "white" }}>Nested Example</span>
                 </Link>
@@ -65,13 +65,13 @@ function Sidebar() {
                    Hooks
                 </div>
                 <Link className="nav-link collapsed" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities" to="useref">
+                    aria-expanded="true" aria-controls="collapseUtilities" to="/useref">
                     <i className="fas fa-fw fa-wrench"></i>
                     <span style={{ color: "white" }}>useRef</span>
                 </Link>
 
                 <Link className="nav-link collapsed" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities" to="usereducer">
+                    aria-expanded="true" aria-controls="collapseUtilities" to="/usereducer">
                     <i className="fas fa-fw fa-wrench"></i>
                     <span style={{ color: "white" }}>useReducer</span>
                 </Link>

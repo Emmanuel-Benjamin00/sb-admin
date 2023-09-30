@@ -1,42 +1,22 @@
-import React  from 'react'
+import React, { useContext } from 'react'
 import Card from './card';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
-
-const data = [
-    {
-        color:"primary",
-        value:"40,000",
-        head:"Earnings (Monthly)",
-        logo:"fa-calendar"
-    },
-    {
-        color:"success",
-        value:"215,000",
-        head:"Earnings (Annual)",
-        logo:"fa-dollar-sign"
-    },
-    {
-        isLoading:true,
-        color:"info",
-        value:"50",
-        head:"Tasks",
-        logo:"fa-clipboard-list"
-    },
-    {
-        color:"warning",
-        value:"18",
-        head:"Pending Requests",
-        logo:"fa-comments"
-    }
-]
+import { UserDataContext } from './context/UserContext';
+import { DashboardDataContext } from './context/DashboardContext';
+import UseLogout from './Hooks/UseLogout';
 
 
-function Dashboard({datas,setDatas}) {
-    let handleDelete = (index) =>{
+function Dashboard() {
+    let {data} = useContext(DashboardDataContext)
+    let { datas, setDatas } = useContext(UserDataContext)
+    let logout = UseLogout()
+
+
+    let handleDelete = (index) => {
         let newArray = [...datas]
-        newArray.splice(index,1);
+        newArray.splice(index, 1);
         setDatas(newArray)
     }
 
@@ -47,8 +27,7 @@ function Dashboard({datas,setDatas}) {
 
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
-                    <a href="#" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                        className="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    <Button className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onClick={logout}>Log Out</Button>
                 </div>
 
                 <div className="row">
@@ -75,24 +54,23 @@ function Dashboard({datas,setDatas}) {
                         <tbody>
                             {
                                 datas.map((e, i) => {
-                                    return (
-                                        <tr key={i}>
-                                            <td>{i + 1}</td>
-                                            <td>{e.name}</td>
-                                            <td>{e.username}</td>
-                                            <td>{e.email}</td>
-                                            <td>{e.mobile}</td>
-                                            <td>{e.batch}</td>
-                                            <td>
-                                                <Button variant="primary" onClick={()=>{
-                                                    navigate(`/edit/${i}`)
-                                                }}>Edit</Button>
-                                                &nbsp;
-                                                &nbsp;
-                                                <Button variant="danger" onClick={()=>handleDelete(i)}>Delete</Button>
-                                            </td>
-                                        </tr>
-                                    )
+                                    return <tr key={i}>
+                                        <td>{i + 1}</td>
+                                        <td>{e.name}</td>
+                                        <td>{e.username}</td>
+                                        <td>{e.email}</td>
+                                        <td>{e.mobile}</td>
+                                        <td>{e.batch}</td>
+                                        <td>
+                                            <Button variant="primary" onClick={() => {
+                                                navigate(`/edit/${i}`)
+                                            }}>Edit</Button>
+                                            &nbsp;
+                                            &nbsp;
+                                            <Button variant="danger" onClick={() => handleDelete(i)}>Delete</Button>
+                                        </td>
+                                    </tr>
+
                                 })
                             }
                         </tbody>

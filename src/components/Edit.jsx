@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import { UserDataContext } from './context/UserContext';
 
 
-function Edit({ datas, setDatas }) {
+const Edit = () => {
   const params = useParams()
+  const {datas, setDatas} = useContext(UserDataContext)
   const [initialValues, setInitialValues] = useState({
     name: "",
     email: "",
@@ -69,8 +71,7 @@ function Edit({ datas, setDatas }) {
     }
   }, [])
 
-  return (
-    <>
+  return   <>
       <div className="container-fluid">
 
         <div className="d-sm-flex align-items-center justify-content-between mb-4">
@@ -83,10 +84,11 @@ function Edit({ datas, setDatas }) {
             validationSchema={UserSchema}
             enableReinitialize={true}
             onSubmit={(value) => {
-              let newArray = [...datas]
-              newArray.splice(Number(params.id), 1, value)
+              const newArray = [...datas]
+              newArray.splice(Number(params.id), 1,value)
               setDatas(newArray)
-              navigate("dashboard")
+              console.log(newArray)
+              navigate("/dashboard")
             }}
           >
 
@@ -132,7 +134,7 @@ function Edit({ datas, setDatas }) {
         </div>
       </div>
     </>
-  )
+  
 }
 
 export default Edit
