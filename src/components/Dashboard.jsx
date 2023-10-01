@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Card from './card';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -6,18 +6,64 @@ import { useNavigate } from 'react-router-dom';
 import { UserDataContext } from './context/UserContext';
 import { DashboardDataContext } from './context/DashboardContext';
 import UseLogout from './Hooks/UseLogout';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Dashboard() {
-    let {data} = useContext(DashboardDataContext)
-    let { datas, setDatas } = useContext(UserDataContext)
+
+    let { data } = useContext(DashboardDataContext)
+    let { API_URL } = useContext(UserDataContext)
     let logout = UseLogout()
 
+    const [datas, setDatas] = useState([])
 
-    let handleDelete = (index) => {
-        let newArray = [...datas]
-        newArray.splice(index, 1);
-        setDatas(newArray)
+    /*
+        !Getting API in traditional promise chaining method
+        function getData() {
+            fetch(API_URL,{
+                method:'GET',
+                'Content-Type':'application/json'
+            )}
+            .then((res) => res.json())
+            .then((data) => console.log(data))
+        }
+    */
+
+
+    //Axios Method
+    const getData = async () => {
+        try {
+            let res = await axios.get(API_URL)
+            if (res.status === 200) {
+                console.log(res.data)
+                //toast.success("User data fetched")
+                setDatas(res.data)
+            }
+        } catch (error) {
+            toast.error("Internal Server Error")
+        }
+
+
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    let handleDelete =  async(id,index) => {
+        let newData = [...datas]
+        newData.splice(index,1)
+        setDatas(newData)
+        try {
+            let res = await axios.delete(`${API_URL}/${id}`)
+            if(res.status===200){
+                getData()
+            }
+        } catch (error) {
+            toast.error("Error Occured")
+        }
     }
 
     const navigate = useNavigate();
@@ -63,11 +109,11 @@ function Dashboard() {
                                         <td>{e.batch}</td>
                                         <td>
                                             <Button variant="primary" onClick={() => {
-                                                navigate(`/edit/${i}`)
+                                                navigate(`/edit/${e.id}`)
                                             }}>Edit</Button>
                                             &nbsp;
                                             &nbsp;
-                                            <Button variant="danger" onClick={() => handleDelete(i)}>Delete</Button>
+                                            <Button variant="danger" onClick={() => handleDelete(e.id,i)}>Delete</Button>
                                         </td>
                                     </tr>
 

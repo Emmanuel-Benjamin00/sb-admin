@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from "yup";
 import { UserDataContext } from './context/UserContext';
+import axios from 'axios';
+import {toast} from 'react-toastify' 
 
 function Create() {
   let navigate = useNavigate()
-  let {datas,setDatas} = useContext(UserDataContext)
+  let {API_URL} = useContext(UserDataContext)
 
   const UserSchema = Yup.object().shape({
     name: Yup.string().required("* Required"),
@@ -18,6 +20,17 @@ function Create() {
     batch: Yup.string()
   })
 
+  const handleCreate = async(values)=>{
+    try {
+      let res = await axios.post(API_URL,values)
+      if(res.status===201){
+        navigate("/dashboard")
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Error Occurred")
+    }
+  }
 
   return (
     <>
@@ -27,6 +40,7 @@ function Create() {
           <h1 className="h3 mb-0 text-gray-800">Create User</h1>
         </div>
 
+      
         <div className='row'>
           <Formik
             initialValues={
@@ -35,17 +49,12 @@ function Create() {
                 username: "",
                 email: "",
                 mobile: "",
-                batch: ""
+                batch: "",
+                password:""
               }
             }
             validationSchema={UserSchema}
-            onSubmit={(value) => {
-              let newArray = [...datas];
-              newArray.push(value);
-              setDatas(newArray);
-              navigate("/dashboard");
-            }
-            }
+            onSubmit={(values) => {handleCreate(values)}}
 
           >
             {({ errors, touched, handleChange, handleBlur, handleSubmit }) => (
@@ -66,6 +75,12 @@ function Create() {
                   <Form.Label>Email</Form.Label>
                   <Form.Control type="email" name="email" placeholder="Enter Email" onChange={handleChange} onBlur={handleBlur} />
                   {errors.email && touched.email ? <div style={{ color: "red" }}>{errors.email}</div> : ""}
+                </Form.Group>
+
+                <Form.Group className="mb-3" >
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" name="password" placeholder="Enter Password" onChange={handleChange} onBlur={handleBlur} />
+                  {errors.password && touched.password ? <div style={{ color: "red" }}>{errors.password}</div> : ""}
                 </Form.Group>
 
                 <Form.Group className="mb-3" >

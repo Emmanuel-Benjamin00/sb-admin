@@ -2,23 +2,8 @@ import React, { useState} from 'react'
 
 export const UserDataContext = React.createContext(null)
 function UserContext({ children }) {
-  let [datas, setDatas] = useState([
-    {
-      name: "Vijay",
-      username: "vijay123",
-      email: "vijay@gmail.com",
-      mobile: "1234567",
-      batch: "B101"
-    }, {
-      name: "Joseph",
-      username: "joseph123",
-      email: "joseph@gmail.com",
-      mobile: "123456778",
-      batch: "B102"
-    }
-  ])
-
-  return <UserDataContext.Provider value={{ datas, setDatas }}>
+  const API_URL = "https://6516655c09e3260018c9b408.mockapi.io/api/v1/users"
+  return <UserDataContext.Provider value={{API_URL}}>
     {children}
   </UserDataContext.Provider>
 }
